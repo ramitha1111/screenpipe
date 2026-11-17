@@ -424,6 +424,16 @@ jobs:
         echo "$install_dir" >> "$GITHUB_PATH"
         "$install_dir/bun" --version
 
+    - name: Cache apt packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          /var/cache/apt/archives
+          /var/lib/apt/lists
+        key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/e2e-test.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
     - name: Install Linux dependencies
       timeout-minutes: 35
       run: |
